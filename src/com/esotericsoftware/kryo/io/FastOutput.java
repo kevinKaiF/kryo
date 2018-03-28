@@ -19,12 +19,13 @@
 
 package com.esotericsoftware.kryo.io;
 
-import java.io.OutputStream;
-
 import com.esotericsoftware.kryo.KryoException;
+
+import java.io.OutputStream;
 
 /** Same as Output, but does not use variable length encoding for integer types.
  * @author Roman Levenstein <romxilev@gmail.com> */
+// 不进行zigzag算法编码
 public final class FastOutput extends Output {
 
 	/** Creates an uninitialized Output. {@link #setBuffer(byte[], int)} must be called before the Output is used. */

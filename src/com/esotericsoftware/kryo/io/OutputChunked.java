@@ -19,16 +19,18 @@
 
 package com.esotericsoftware.kryo.io;
 
-import static com.esotericsoftware.minlog.Log.*;
+import com.esotericsoftware.kryo.KryoException;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.esotericsoftware.kryo.KryoException;
+import static com.esotericsoftware.minlog.Log.TRACE;
+import static com.esotericsoftware.minlog.Log.trace;
 
 /** An OutputStream that buffers data in a byte array and flushes to another OutputStream, writing the length before each flush.
  * The length allows the chunks to be skipped when reading.
  * @author Nathan Sweet <misc@n4te.com> */
+// 写出块大小
 public class OutputChunked extends Output {
 	/** Creates an uninitialized OutputChunked with a maximum chunk size of 2048. The OutputStream must be set before it can be
 	 * used. */

@@ -19,24 +19,18 @@
 
 package com.esotericsoftware.kryo.io;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.CharBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
-
 import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.util.UnsafeUtil;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.*;
 
 /** An OutputStream that buffers data in a byte array and optionally flushes to another OutputStream. Utility methods are provided
  * for efficiently writing primitive types and strings.
  * 
  * @author Roman Levenstein <romixlev@gmail.com> */
+// 基于byteBuffer
 public class ByteBufferOutput extends Output {
 	protected ByteBuffer niobuffer;
 
@@ -163,6 +157,9 @@ public class ByteBufferOutput extends Output {
 		if (buffer == null) throw new IllegalArgumentException("buffer cannot be null.");
 		if (maxBufferSize < -1) throw new IllegalArgumentException("maxBufferSize cannot be < -1: " + maxBufferSize);
 		this.niobuffer = buffer;
+		/**
+		 * 	数组的最大容量{@link java.util.ArrayList#MAX_ARRAY_SIZE}
+		 */
 		this.maxCapacity = maxBufferSize == -1 ? Util.MAX_SAFE_ARRAY_SIZE : maxBufferSize;
 		byteOrder = buffer.order();
 		capacity = buffer.capacity();

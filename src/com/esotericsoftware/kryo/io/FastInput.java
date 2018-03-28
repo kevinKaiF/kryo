@@ -19,12 +19,13 @@
 
 package com.esotericsoftware.kryo.io;
 
-import java.io.InputStream;
-
 import com.esotericsoftware.kryo.KryoException;
+
+import java.io.InputStream;
 
 /** Same as Input, but does not use variable length encoding for integer types.
  * @author Roman Levenstein <romxilev@gmail.com> */
+// 不进行zigzag算法解码
 public final class FastInput extends Input {
 
 	/** Creates an uninitialized Output. {@link #setBuffer(byte[], int, int)} must be called before the Output is used. */

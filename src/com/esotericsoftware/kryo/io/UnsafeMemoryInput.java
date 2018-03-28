@@ -19,14 +19,13 @@
 
 package com.esotericsoftware.kryo.io;
 
-import static com.esotericsoftware.kryo.util.UnsafeUtil.*;
+import com.esotericsoftware.kryo.KryoException;
+import sun.nio.ch.DirectBuffer;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import com.esotericsoftware.kryo.KryoException;
-
-import sun.nio.ch.DirectBuffer;
+import static com.esotericsoftware.kryo.util.UnsafeUtil.*;
 
 /** An optimized InputStream that reads data directly from the off-heap memory. Utility methods are provided for efficiently
  * reading primitive types, arrays of primitive types and strings. It uses @link{sun.misc.Unsafe} to achieve a very good
@@ -40,6 +39,7 @@ import sun.nio.ch.DirectBuffer;
  * <li>Serialized representation used as input for this class should always be produced using @link{UnsafeMemoryOutput}</li>
  * </p>
  * @author Roman Levenstein <romixlev@gmail.com> */
+// unsafe版本的byteBufferInput
 public final class UnsafeMemoryInput extends ByteBufferInput {
 	/** Start address of the memory buffer The memory buffer should be non-movable, which normally means that is is allocated
 	 * off-heap */

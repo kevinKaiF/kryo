@@ -19,10 +19,10 @@
 
 package com.esotericsoftware.kryo.io;
 
+import com.esotericsoftware.kryo.Kryo;
+
 import java.io.IOException;
 import java.io.ObjectOutput;
-
-import com.esotericsoftware.kryo.Kryo;
 
 /** A kryo adapter for the {@link java.io.ObjectOutput} class. Note that this is not a Kryo implementation of
  * {@link java.io.ObjectOutputStream} which has special handling for default serialization and serialization extras like
@@ -30,6 +30,7 @@ import com.esotericsoftware.kryo.Kryo;
  * byte for each time {@link #writeObject(Object)} is invoked since we need to allow unknown null objects.
  *
  * @author Robert DiFalco <robert.difalco@gmail.com> */
+// 对kryoDataOutput扩展，引入kryo，可以序列化对象
 public class KryoObjectOutput extends KryoDataOutput implements ObjectOutput {
 
 	private final Kryo kryo;

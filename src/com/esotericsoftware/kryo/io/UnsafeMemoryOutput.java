@@ -19,16 +19,15 @@
 
 package com.esotericsoftware.kryo.io;
 
-import static com.esotericsoftware.kryo.util.UnsafeUtil.*;
+import com.esotericsoftware.kryo.KryoException;
+import com.esotericsoftware.kryo.util.Util;
+import sun.nio.ch.DirectBuffer;
 
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.esotericsoftware.kryo.KryoException;
-import com.esotericsoftware.kryo.util.Util;
-
-import sun.nio.ch.DirectBuffer;
+import static com.esotericsoftware.kryo.util.UnsafeUtil.*;
 
 /** An optimized OutputStream that writes data directly into the off-heap memory. Utility methods are provided for efficiently
  * writing primitive types, arrays of primitive types and strings. It uses @link{sun.misc.Unsafe} to achieve a very good
@@ -44,6 +43,7 @@ import sun.nio.ch.DirectBuffer;
  * 
  * </p>
  * @author Roman Levenstein <romixlev@gmail.com> */
+// unsafe版本的byteBufferOutput
 public final class UnsafeMemoryOutput extends ByteBufferOutput {
 
 	/** Start address of the memory buffer The memory buffer should be non-movable, which normally means that is is allocated

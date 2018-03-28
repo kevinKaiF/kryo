@@ -19,15 +19,17 @@
 
 package com.esotericsoftware.kryo.io;
 
-import static com.esotericsoftware.minlog.Log.*;
+import com.esotericsoftware.kryo.KryoException;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.esotericsoftware.kryo.KryoException;
+import static com.esotericsoftware.minlog.Log.TRACE;
+import static com.esotericsoftware.minlog.Log.trace;
 
 /** An InputStream that reads lengths and chunks of data from another OutputStream, allowing chunks to be skipped.
  * @author Nathan Sweet <misc@n4te.com> */
+// 读取块大小
 public class InputChunked extends Input {
 	private int chunkSize = -1;
 

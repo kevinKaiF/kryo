@@ -19,11 +19,11 @@
 
 package com.esotericsoftware.kryo.io;
 
-import static com.esotericsoftware.kryo.util.UnsafeUtil.*;
+import com.esotericsoftware.kryo.KryoException;
 
 import java.io.InputStream;
 
-import com.esotericsoftware.kryo.KryoException;
+import static com.esotericsoftware.kryo.util.UnsafeUtil.*;
 
 /** An optimized InputStream that reads data from a byte array and optionally fills the byte array from another InputStream as
  * needed. Utility methods are provided for efficiently writing primitive types, arrays of primitive types and strings. It uses
@@ -39,6 +39,7 @@ import com.esotericsoftware.kryo.KryoException;
  *                        using @link{UnsafeOutput}</li>
  *                        </p>
  * @author Roman Levenstein <romixlev@gmail.com> */
+// unsafe版本的input
 public final class UnsafeInput extends Input {
 
 	private boolean varIntsEnabled = false;

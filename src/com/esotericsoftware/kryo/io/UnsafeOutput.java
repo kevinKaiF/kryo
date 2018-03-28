@@ -19,13 +19,13 @@
 
 package com.esotericsoftware.kryo.io;
 
-import static com.esotericsoftware.kryo.util.UnsafeUtil.*;
+import com.esotericsoftware.kryo.KryoException;
+import com.esotericsoftware.kryo.util.Util;
 
 import java.io.OutputStream;
 import java.nio.ByteOrder;
 
-import com.esotericsoftware.kryo.KryoException;
-import com.esotericsoftware.kryo.util.Util;
+import static com.esotericsoftware.kryo.util.UnsafeUtil.*;
 
 /** An optimized OutputStream that buffers data in a byte array and optionally flushes to another OutputStream. Utility methods
  * are provided for efficiently writing primitive types, arrays of primitive types and strings. It uses @link{sun.misc.Unsafe} to
@@ -41,6 +41,7 @@ import com.esotericsoftware.kryo.util.Util;
  * 
  * </p>
  * @author Roman Levenstein <romixlev@gmail.com> */
+// unsafe版本的output
 public final class UnsafeOutput extends Output {
 
 	/** If set, variable length encoding will be set for integer types if it is required */

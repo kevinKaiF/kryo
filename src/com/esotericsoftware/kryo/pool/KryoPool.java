@@ -19,11 +19,11 @@
 
 package com.esotericsoftware.kryo.pool;
 
+import com.esotericsoftware.kryo.Kryo;
+
 import java.lang.ref.SoftReference;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import com.esotericsoftware.kryo.Kryo;
 
 /** A simple pool interface for {@link Kryo} instances. Use the {@link KryoPool.Builder} to construct a pool instance.
  * 
@@ -59,9 +59,11 @@ import com.esotericsoftware.kryo.Kryo;
 public interface KryoPool {
 
 	/** Takes a {@link Kryo} instance from the pool or creates a new one (using the factory) if the pool is empty. */
+	// 从KryoPool获取一个Kryo实例
 	Kryo borrow ();
 
 	/** Returns the given {@link Kryo} instance to the pool. */
+	// 将Kryo实例放入kroyPool
 	void release (Kryo kryo);
 
 	/** Runs the provided {@link KryoCallback} with a {@link Kryo} instance from the pool (borrow/release around

@@ -25,6 +25,7 @@ import java.io.IOException;
 /** A kryo implementation of {@link java.io.DataOutput}.
  *
  * @author Robert DiFalco <robert.difalco@gmail.com> */
+// 委托output，实现上层包装
 public class KryoDataOutput implements DataOutput {
 
 	protected Output output;

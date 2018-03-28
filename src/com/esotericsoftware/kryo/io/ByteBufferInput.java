@@ -19,24 +19,18 @@
 
 package com.esotericsoftware.kryo.io;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.CharBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
-
 import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.util.UnsafeUtil;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.*;
 
 /** An InputStream that reads data from a byte array and optionally fills the byte array from another InputStream as needed.
  * Utility methods are provided for efficiently reading primitive types and strings.
  * 
  * @author Roman Levenstein <romixlev@gmail.com> */
+// 基于byteBuffer
 public class ByteBufferInput extends Input {
 	protected ByteBuffer niobuffer;
 
@@ -205,6 +199,20 @@ public class ByteBufferInput extends Input {
 
 		// Compact. Position after compaction can be non-zero
 		niobuffer.position(position);
+		// compact的压缩过程
+		// 原始情况：
+		// 				pos       limit        capacity
+		// 	 -------------------------------------
+		//   |	0|	1|	2|	3|	4|	5|	 |	 |	 |
+		//   -------------------------------------
+		// 压缩之后：
+		// 				   pos               limit/capacity
+		// 	 -------------------------------------
+		//   |	3|	4|	5|	 |	 |	 |	 |	 |	 |
+		//   -------------------------------------
+		// 中间会有一个复制的过程，将原来已经读取过的数据覆盖
+		// position变为原来的limit-position，即剩余未读取的个数
+		// limit变为capacity
 		niobuffer.compact();
 		total += position;
 		position = 0;

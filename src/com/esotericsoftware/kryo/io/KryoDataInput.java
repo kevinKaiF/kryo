@@ -19,16 +19,17 @@
 
 package com.esotericsoftware.kryo.io;
 
+import com.esotericsoftware.kryo.KryoException;
+
 import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
-
-import com.esotericsoftware.kryo.KryoException;
 
 /** Best attempt adapter for {@link DataInput}. Currently only {@link #readLine()} is unsupported. Other methods behave slightly
  * differently. For example, {@link #readUTF()} may return a null string.
  *
  * @author Robert DiFalco <robert.difalco@gmail.com> */
+// 委托input，实现上层包装
 public class KryoDataInput implements DataInput {
 
 	protected Input input;

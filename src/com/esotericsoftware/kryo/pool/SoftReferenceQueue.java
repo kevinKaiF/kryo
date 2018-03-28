@@ -19,17 +19,18 @@
 
 package com.esotericsoftware.kryo.pool;
 
+import com.esotericsoftware.kryo.Kryo;
+
 import java.lang.ref.SoftReference;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
 
-import com.esotericsoftware.kryo.Kryo;
-
 /** Internally uses {@link SoftReference}s for queued Kryo instances, most importantly adjusts the {@link Queue#poll() poll}
  * behavior so that gc'ed Kryo instances are skipped. Most other methods are unsupported.
  *
  * @author Martin Grotzke */
+// 将Kryo实例用SoftReference包装一层，可以避免GC，只有在内存不足的时候才被GC
 class SoftReferenceQueue implements Queue<Kryo> {
 
 	private Queue<SoftReference<Kryo>> delegate;

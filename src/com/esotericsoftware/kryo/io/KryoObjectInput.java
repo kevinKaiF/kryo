@@ -19,15 +19,16 @@
 
 package com.esotericsoftware.kryo.io;
 
+import com.esotericsoftware.kryo.Kryo;
+
 import java.io.IOException;
 import java.io.ObjectInput;
-
-import com.esotericsoftware.kryo.Kryo;
 
 /** A kryo implementation of {@link ObjectInput}. Note that this is not an implementation of {@link java.io.ObjectInputStream}
  * which has special handling for serialization in Java such as support for readResolve.
  *
  * @author Robert DiFalco <robert.difalco@gmail.com> */
+// 对KryoDataInput进行扩展，引入kryo，可以反序列化对象
 public class KryoObjectInput extends KryoDataInput implements ObjectInput {
 
 	private final Kryo kryo;

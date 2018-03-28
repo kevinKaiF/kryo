@@ -19,10 +19,10 @@
 
 package com.esotericsoftware.kryo.factories;
 
-import static com.esotericsoftware.kryo.util.Util.*;
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
+
+import static com.esotericsoftware.kryo.util.Util.className;
 
 /** This factory instantiates new serializers of a given class via reflection. The constructors of the given
  * {@code serializerClass} must either take an instance of {@link Kryo} and an instance of {@link Class} as its parameter, take
@@ -48,12 +48,15 @@ public class ReflectionSerializerFactory implements SerializerFactory {
 	public static Serializer makeSerializer (Kryo kryo, Class<? extends Serializer> serializerClass, Class<?> type) {
 		try {
 			try {
+				// 1.查找以Kryo,Class为参数的构造方法
 				return serializerClass.getConstructor(Kryo.class, Class.class).newInstance(kryo, type);
 			} catch (NoSuchMethodException ex1) {
 				try {
+					// 2.如果没有找到以Kryo,Class为参数的构造方法，那么就查找以Kryo为参数的构造方法
 					return serializerClass.getConstructor(Kryo.class).newInstance(kryo);
 				} catch (NoSuchMethodException ex2) {
 					try {
+						// 3.如果都没找到，那么查找以Class为参数的构造方法
 						return serializerClass.getConstructor(Class.class).newInstance(type);
 					} catch (NoSuchMethodException ex3) {
 						return serializerClass.newInstance();

@@ -19,10 +19,10 @@
 
 package com.esotericsoftware.kryo.io;
 
+import com.esotericsoftware.kryo.KryoException;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import com.esotericsoftware.kryo.KryoException;
 
 /** An OutputStream that buffers data in a byte array and optionally flushes to another OutputStream. Utility methods are provided
  * for efficiently writing primitive types and strings.
@@ -162,6 +162,7 @@ public class Output extends OutputStream {
 		if (required > maxCapacity)
 			throw new KryoException("Buffer overflow. Max capacity: " + maxCapacity + ", required: " + required);
 		flush();
+		// 进行扩容
 		while (capacity - position < required) {
 			if (capacity == maxCapacity)
 				throw new KryoException("Buffer overflow. Available: " + (capacity - position) + ", required: " + required);
@@ -188,6 +189,7 @@ public class Output extends OutputStream {
 			throw new KryoException(ex);
 		}
 		total += position;
+		// 刷出缓存后，将buffer的position置为0
 		position = 0;
 	}
 
@@ -552,8 +554,10 @@ public class Output extends OutputStream {
 	/** Writes a 1-9 byte long. It is guaranteed that a varible length encoding will be used.
 	 * @param optimizePositive If true, small positive numbers will be more efficient (1 byte) and small negative numbers will be
 	 *           inefficient (9 bytes). */
+	// 采用zigzag算法
 	public int writeVarLong (long value, boolean optimizePositive) throws KryoException {
 		if (!optimizePositive) value = (value << 1) ^ (value >> 63);
+		// 如果小于128，需要1个byte就够了
 		if (value >>> 7 == 0) {
 			require(1);
 			buffer[position++] = (byte)value;

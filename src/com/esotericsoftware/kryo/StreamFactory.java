@@ -19,14 +19,15 @@
 
 package com.esotericsoftware.kryo;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /** Provides input and output streams based on system settings.
  * @author Roman Levenstein <romixlev@gmail.com> */
+// stream，input,output的工厂类
 public interface StreamFactory {
 
 	/** Creates an uninitialized Input. */

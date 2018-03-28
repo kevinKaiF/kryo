@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 
 /** An InputStream whose source is a {@link ByteBuffer}.
  * @author Nathan Sweet <misc@n4te.com> */
+// 委托了一个byteBuffer，从byteBuffer中读取数据
 public class ByteBufferInputStream extends InputStream {
 	private ByteBuffer byteBuffer;
 

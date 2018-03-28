@@ -27,6 +27,7 @@ import com.esotericsoftware.kryo.Serializer;
  * {@link Kryo#setDefaultSerializer(SerializerFactory)} a different serializer can be created dependent on the type of a class.
  *
  * @author Rafael Winterhalter <rafael.wth@web.de> */
+// 序列化工厂的作用是创建序列化器
 public interface SerializerFactory {
 
 	/** Creates a new serializer

@@ -19,10 +19,10 @@
 
 package com.esotericsoftware.kryo.io;
 
+import com.esotericsoftware.kryo.KryoException;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.esotericsoftware.kryo.KryoException;
 
 /** An InputStream that reads data from a byte array and optionally fills the byte array from another InputStream as needed.
  * Utility methods are provided for efficiently reading primitive types and strings.
@@ -32,8 +32,11 @@ import com.esotericsoftware.kryo.KryoException;
  * @author Nathan Sweet <misc@n4te.com> */
 public class Input extends InputStream {
 	protected byte[] buffer;
+	// position是外部读取buffer的最新位置
 	protected int position;
+	// buffer的容量，通常是buffer的length
 	protected int capacity;
+	// 表示字节已经填充到的位置,要比capacity要小
 	protected int limit;
 	protected long total;
 	protected char[] chars = new char[32];
@@ -158,6 +161,14 @@ public class Input extends InputStream {
 
 	/** Fills the buffer with more bytes. Can be overridden to fill the bytes from a source other than the InputStream.
 	 * @return -1 if there are no more bytes. */
+	/**
+	 * 这个是input类的最主要的功能，内部委托了inputStream,在fill的时候将inputStream读到buffer字节数组中
+	 * @param buffer
+	 * @param offset
+	 * @param count
+	 * @return
+	 * @throws KryoException
+     */
 	protected int fill (byte[] buffer, int offset, int count) throws KryoException {
 		if (inputStream == null) return -1;
 		try {
@@ -170,14 +181,25 @@ public class Input extends InputStream {
 	/** @param required Must be > 0. The buffer is filled until it has at least this many bytes.
 	 * @return the number of bytes remaining.
 	 * @throws KryoException if EOS is reached before required bytes are read (buffer underflow). */
+
+	/**
+	 * required读取所需的字节数目，如果buffer剩余的字节数目不满足，required的字节数目，抛出异常
+	 * @param required
+	 * @return
+	 * @throws KryoException
+     */
 	protected int require (int required) throws KryoException {
+		// 剩余未读取的字节数目
 		int remaining = limit - position;
+		// 如果未读取的字节数大于等于申请的字节数目，说明你需要的字节数目都给你填充好了，你可以直接读取了
 		if (remaining >= required) return remaining;
 		if (required > capacity) throw new KryoException("Buffer too small: capacity: " + capacity + ", required: " + required);
 
 		int count;
 		// Try to fill the buffer.
 		if (remaining > 0) {
+			// limit开始填充的位置
+			// capacity-limit剩余可填充的数目
 			count = fill(buffer, limit, capacity - limit);
 			if (count == -1) throw new KryoException("Buffer underflow.");
 			remaining += count;
@@ -188,6 +210,9 @@ public class Input extends InputStream {
 		}
 
 		// Was not enough, compact and try again.
+		// 如果走到这里，说明remaining < required的，即申请的字节数目大于目前已读取的
+		// 所以需要进行一次copy，但是不用担心required是否大于capacity
+		// 因为196行已经判断了，所以required能读取的最大数目就是buffer的容量capacity
 		System.arraycopy(buffer, position, buffer, 0, remaining);
 		total += position;
 		position = 0;
@@ -372,7 +397,9 @@ public class Input extends InputStream {
 	public int readVarInt (boolean optimizePositive) throws KryoException {
 		if (require(1) < 5) return readInt_slow(optimizePositive);
 		int b = buffer[position++];
+		// 如果b是大于128的，最高位为1，和0x7F进行 与 操作的时候，最高位就变为0了
 		int result = b & 0x7F;
+		// 如果大于128
 		if ((b & 0x80) != 0) {
 			byte[] buffer = this.buffer;
 			b = buffer[position++];
